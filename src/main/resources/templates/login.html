@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>Страница входа | ГГМК</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <form action="/login" method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Логин и Пароль</span>
+            </div>
+            <input class="form-control" name="username" type="text">
+            <input class="form-control" name="password" type="password">
+        </div>
+        <div class="btn-group d-flex">
+            <input class="btn btn-primary" type="submit" value="Войти">
+            <a class="btn btn-secondary" href="#" role="button">Восстановить пароль</a>
+        </div>
+        <input name="_csrf" type="hidden" value="{{_csrf.token}}"/>
+    </form>
+</div>
+</body>
+</html>

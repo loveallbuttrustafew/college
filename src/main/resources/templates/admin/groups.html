@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>Группы | ГГМК</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+{{>admin/menu}}
+<div class="container">
+    <form action="/admin/groups/add" method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Название, курс, номер группы</span>
+            </div>
+            <input class="form-control" name="title" type="text">
+            <input class="form-control" name="course" type="number">
+            <input class="form-control" name="number" type="number">
+        </div>
+        <div class="custom-control custom-checkbox mb-3">
+            <input class="custom-control-input" id="commercial" name="commercial" type="checkbox">
+            <label class="custom-control-label" for="commercial">коммерческая группа</label>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Добавить">
+        <input name="_csrf" type="hidden" value="{{_csrf.token}}"/>
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Курс</th>
+            <th scope="col">Номер группы</th>
+            <th scope="col">Коммерческая</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#groups}}
+        <tr>
+            <th scope="row">{{id}}</th>
+            <td>{{title}}</td>
+            <td>{{course}}</td>
+            <td>{{number}}</td>
+            <td>{{commercial}}</td>
+        </tr>
+        {{/groups}}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Учителя | ГГМК</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+{{>admin/menu}}
+<div class="container">
+    <form action="/admin/teachers/add" method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Имя, фамилия, Логин, Пароль</span>
+            </div>
+            <input class="form-control" name="firstName" type="text">
+            <input class="form-control" name="lastName" type="text">
+            <input class="form-control" name="username" type="text">
+            <input class="form-control" name="password" type="password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Добавить">
+        <input name="_csrf" type="hidden" value="{{_csrf.token}}"/>
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Логин</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#teachers}}
+        <tr>
+            <th scope="row">{{id}}</th>
+            <td>{{firstName}}</td>
+            <td>{{lastName}}</td>
+            <td>{{username}}</td>
+        </tr>
+        {{/teachers}}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
