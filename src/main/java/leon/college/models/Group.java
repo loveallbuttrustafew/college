@@ -8,7 +8,6 @@ import java.util.Set;
 @Entity
 @Table(name = "groups")
 @Data
-@NoArgsConstructor
 @Builder
 public class Group {
     @Id
