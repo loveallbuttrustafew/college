@@ -1,6 +1,7 @@
 package leon.college.models;
 
 import lombok.*;
+import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -23,4 +24,7 @@ public class Group {
     private Byte number;
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<User> users;
+
+    @Tolerate
+    Group(){}
 }

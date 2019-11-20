@@ -1,8 +1,7 @@
 package leon.college.models;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
 
@@ -25,4 +24,7 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "groupId")
     private Group group;
+
+    @Tolerate
+    User(){}
 }
