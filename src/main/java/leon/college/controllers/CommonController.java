@@ -25,11 +25,13 @@ public class CommonController {
 
     @GetMapping("/init")
     public String init() {
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword("admin");
-        user.setRole(Role.ADMIN);
-        user.setEnabled(true);
+        User user = User.builder()
+                .username("admin")
+                .password("admin")
+                .role(Role.ADMIN)
+                .enabled(true)
+                .build();
+
         try {
             userService.addUser(user);
         } catch (UserAlreadyExistsException e) {

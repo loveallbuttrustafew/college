@@ -1,14 +1,16 @@
 package leon.college.models;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "persons")
 @Data
-@EqualsAndHashCode
+@NoArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue

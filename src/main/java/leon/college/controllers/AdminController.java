@@ -36,7 +36,7 @@ public class AdminController {
 
     @GetMapping("/admin/students")
     public String students(Model model) {
-        List<User> students = null;
+        List<User> students;
         try {
             students = userService.findByRole(Role.STUDENT);
         } catch (UserNotFoundException e) {
@@ -49,35 +49,23 @@ public class AdminController {
 
     @PostMapping(value = "/admin/students/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String addStudent(@RequestParam Map<String, String> args) {
-        String username = args.get("username");
-        String password = args.get("password");
-        String firstName = args.get("firstName");
-        String lastName = args.get("lastName");
-        Long groupId = Long.valueOf(args.get("groupId"));
 
-        User user = null;
+        Group group;
         try {
-            user = userService.findByUsername(username);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return "redirect:/admin/students";
-        }
-
-        Group group = null;
-        try {
-            group = groupService.findByGroupId(groupId);
+            group = groupService.findByGroupId(Long.valueOf(args.get("groupId")));
         } catch (GroupNotFoundException e) {
             return "redirect:/admin/students";
         }
 
-        user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setGroup(group);
-        user.setRole(Role.STUDENT);
-        user.setEnabled(true);
+        User user = User.builder()
+                .username(args.get("username"))
+                .password(args.get("password"))
+                .firstName(args.get("fistName"))
+                .lastName(args.get("lastName"))
+                .role(Role.STUDENT)
+                .group(group)
+                .enabled(true)
+                .build();
 
         try {
             userService.addUser(user);
@@ -90,7 +78,7 @@ public class AdminController {
 
     @GetMapping("/admin/teachers")
     public String teachers(Model model) {
-        List<User> teachers = null;
+        List<User> teachers;
         try {
             teachers = userService.findByRole(Role.TEACHER);
         } catch (UserNotFoundException e) {
@@ -103,13 +91,14 @@ public class AdminController {
 
     @PostMapping(value = "/admin/teachers/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String addTeacher(@RequestParam Map<String, String> args) {
-        User user = new User();
-        user.setUsername(args.get("username"));
-        user.setPassword(args.get("password"));
-        user.setFirstName(args.get("firstName"));
-        user.setLastName(args.get("lastName"));
-        user.setRole(Role.TEACHER);
-        user.setEnabled(true);
+        User user = User.builder()
+                .username(args.get("username"))
+                .password(args.get("password"))
+                .firstName(args.get("firstName"))
+                .lastName(args.get("lastName"))
+                .role(Role.TEACHER)
+                .enabled(true)
+                .build();
 
         try {
             userService.addUser(user);
@@ -122,7 +111,7 @@ public class AdminController {
 
     @GetMapping("/admin/groups")
     public String groups(Model model) {
-        List<Group> groups = null;
+        List<Group> groups;
         try {
             groups = groupService.findAll();
         } catch (GroupNotFoundException e) {
@@ -135,12 +124,12 @@ public class AdminController {
 
     @PostMapping(value = "/admin/groups/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String addGroup(@RequestParam Map<String, String> args) {
-        Group group = new Group();
-        group.setTitle(args.get("title"));
-        group.setCourse(Byte.parseByte(args.get("course")));
-        group.setNumber(Byte.parseByte(args.get("number")));
-        group.setCommercial(args.get("commercial") != null);
-
+        Group group = Group.builder()
+                .title(args.get("title"))
+                .course(Byte.parseByte(args.get("course")))
+                .number(Byte.parseByte(args.get("number")))
+                .commercial(args.get("commercial") != null)
+                .build();
 
         try {
             groupService.addGroup(group);
@@ -153,7 +142,7 @@ public class AdminController {
 
     @GetMapping("/admin/groups/{id}")
     public String groupInfo(@PathVariable String id, Model model) {
-        Group group = null;
+        Group group;
         try {
             group = groupService.findByGroupId(Long.valueOf(id));
         } catch (GroupNotFoundException e) {

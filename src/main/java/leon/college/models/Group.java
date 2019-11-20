@@ -1,7 +1,6 @@
 package leon.college.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -9,7 +8,8 @@ import java.util.Set;
 @Entity
 @Table(name = "groups")
 @Data
-@EqualsAndHashCode
+@NoArgsConstructor
+@Builder
 public class Group {
     @Id
     @GeneratedValue
