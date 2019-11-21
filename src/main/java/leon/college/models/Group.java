@@ -6,12 +6,15 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "groups")
 @Data
 @Builder
+@ToString
+@EqualsAndHashCode(exclude = {"users"})
 public class Group {
     @Id
     @GeneratedValue
@@ -25,8 +28,7 @@ public class Group {
     @Column(nullable = false)
     private Byte number;
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    @Fetch(value=FetchMode.SELECT)
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     @Tolerate
     Group(){}

@@ -1,5 +1,6 @@
 package leon.college.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.Tolerate;
 
@@ -9,6 +10,8 @@ import javax.persistence.*;
 @Table(name = "persons")
 @Data
 @Builder
+@ToString
+@EqualsAndHashCode(exclude = {"group"})
 public class User {
     @Id
     @GeneratedValue
