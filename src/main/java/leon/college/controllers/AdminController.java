@@ -47,7 +47,6 @@ public class AdminController {
 
     @PostMapping(value = "/admin/students/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String addStudent(@RequestParam Map<String, String> args) {
-
         Group group;
         try {
             group = groupService.findByGroupId(Long.valueOf(args.get("groupId")));
@@ -146,7 +145,6 @@ public class AdminController {
         } catch (GroupNotFoundException e) {
             return "redirect:/admin/groups";
         }
-        // TODO groupInfo
         model.addAttribute("group", group);
         return "admin/groupInfo";
     }
