@@ -44,7 +44,7 @@ public class UserService {
         User user = findByUsername(username);
         if (!user.getPassword().equals(oldPassword))
             throw new PasswordsDontMatchException();
-        // TODO change password
         user.setPassword(newPassword);
+        userRepository.save(user);
     }
 }
