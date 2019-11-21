@@ -6,5 +6,20 @@
 </head>
 <body>
 {{>admin/menu}}
+<div class="container d-flex justify-content-center min-vh-100">
+    <form action="/admin/settings/changepassword" method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Старый и новый пароль</span>
+            </div>
+            <input class="form-control" name="oldPassword" type="password">
+            <input class="form-control" name="newPassword" type="password">
+        </div>
+        <div class="btn-group d-flex">
+            <input class="btn btn-primary" type="submit" value="Сменить пароль">
+        </div>
+        <input name="_csrf" type="hidden" value="{{_csrf.token}}"/>
+    </form>
+</div>
 </body>
 </html>

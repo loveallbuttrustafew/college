@@ -21,7 +21,7 @@ public class User {
     private Role role;
     private String firstName;
     private String lastName;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
 

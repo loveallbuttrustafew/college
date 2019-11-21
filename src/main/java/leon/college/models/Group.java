@@ -2,6 +2,8 @@ package leon.college.models;
 
 import lombok.*;
 import lombok.experimental.Tolerate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -22,7 +24,8 @@ public class Group {
     private Byte course;
     @Column(nullable = false)
     private Byte number;
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    @Fetch(value=FetchMode.SELECT)
     private Set<User> users;
 
     @Tolerate

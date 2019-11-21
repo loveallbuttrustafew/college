@@ -5,12 +5,10 @@ import leon.college.models.Role;
 import leon.college.models.User;
 import leon.college.services.GroupService;
 import leon.college.services.UserService;
-import leon.college.services.exceptions.GroupAlreadyExists;
-import leon.college.services.exceptions.GroupNotFoundException;
-import leon.college.services.exceptions.UserAlreadyExistsException;
-import leon.college.services.exceptions.UserNotFoundException;
+import leon.college.services.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +58,7 @@ public class AdminController {
         User user = User.builder()
                 .username(args.get("username"))
                 .password(args.get("password"))
-                .firstName(args.get("fistName"))
+                .firstName(args.get("firstName"))
                 .lastName(args.get("lastName"))
                 .role(Role.STUDENT)
                 .group(group)
@@ -148,7 +146,7 @@ public class AdminController {
         } catch (GroupNotFoundException e) {
             return "redirect:/admin/groups";
         }
-
+        // TODO groupInfo
         model.addAttribute("group", group);
         return "admin/groupInfo";
     }
@@ -156,5 +154,16 @@ public class AdminController {
     @GetMapping("/admin/settings")
     public String settings() {
         return "admin/settings";
+    }
+
+    @PostMapping(value = "/admin/settings/changepassword", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String changePassword(@RequestParam Map<String, String> args, Authentication authentication) {
+        try {
+            userService.changePassword(authentication.getName(), args.get("oldPassword"), args.get("newPassword"));
+        } catch (UserNotFoundException | PasswordsDontMatchException e) {
+            return "redirect:/admin/settings";
+        }
+
+        return "redirect:/admin/settings";
     }
 }
