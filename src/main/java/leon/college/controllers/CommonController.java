@@ -4,12 +4,16 @@ import leon.college.models.Role;
 import leon.college.models.User;
 import leon.college.services.UserService;
 import leon.college.services.exceptions.UserAlreadyExistsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CommonController {
+    Logger logger = LoggerFactory.getLogger(CommonController.class);
+
     @Autowired
     private UserService userService;
 
@@ -35,8 +39,9 @@ public class CommonController {
         try {
             userService.addUser(user);
         } catch (UserAlreadyExistsException e) {
-            return "redirect:/";
+            logger.warn("Admin already exists");
         }
+
         return "redirect:/";
     }
 }

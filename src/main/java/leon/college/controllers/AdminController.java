@@ -6,6 +6,8 @@ import leon.college.models.User;
 import leon.college.services.GroupService;
 import leon.college.services.UserService;
 import leon.college.services.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,8 @@ import java.util.Map;
 
 @Controller
 public class AdminController {
+    Logger logger = LoggerFactory.getLogger(AdminController.class);
+
     @Autowired
     private UserService userService;
 
@@ -37,11 +41,11 @@ public class AdminController {
         List<User> students;
         try {
             students = userService.findByRole(Role.STUDENT);
+            model.addAttribute("students", students);
         } catch (UserNotFoundException e) {
-            return "admin/students";
+            logger.error("Students not found");
         }
 
-        model.addAttribute("students", students);
         return "admin/students";
     }
 
@@ -50,24 +54,20 @@ public class AdminController {
         Group group;
         try {
             group = groupService.findByGroupId(Long.valueOf(args.get("groupId")));
-        } catch (GroupNotFoundException e) {
-            return "redirect:/admin/students";
-        }
-
-        User user = User.builder()
-                .username(args.get("username"))
-                .password(args.get("password"))
-                .firstName(args.get("firstName"))
-                .lastName(args.get("lastName"))
-                .role(Role.STUDENT)
-                .group(group)
-                .enabled(true)
-                .build();
-
-        try {
+            User user = User.builder()
+                    .username(args.get("username"))
+                    .password(args.get("password"))
+                    .firstName(args.get("firstName"))
+                    .lastName(args.get("lastName"))
+                    .role(Role.STUDENT)
+                    .group(group)
+                    .enabled(true)
+                    .build();
             userService.addUser(user);
+        } catch (GroupNotFoundException e) {
+            logger.warn("Group doesn't exists");
         } catch (UserAlreadyExistsException e) {
-            return "redirect:/admin/students";
+            logger.warn("Username already taken");
         }
 
         return "redirect:/admin/students";
@@ -100,7 +100,7 @@ public class AdminController {
         try {
             userService.addUser(user);
         } catch (UserAlreadyExistsException e) {
-            return "redirect:/admin/teachers";
+            logger.warn("Username already taken");
         }
 
         return "redirect:/admin/teachers";
@@ -131,7 +131,7 @@ public class AdminController {
         try {
             groupService.addGroup(group);
         } catch (GroupAlreadyExists groupAlreadyExists) {
-            return "redirect:/admin/groups";
+            logger.warn("Group already exists");
         }
 
         return "redirect:/admin/groups";
@@ -142,10 +142,11 @@ public class AdminController {
         Group group;
         try {
             group = groupService.findByGroupId(Long.valueOf(id));
+            model.addAttribute("group", group);
         } catch (GroupNotFoundException e) {
-            return "redirect:/admin/groups";
+            logger.warn("Group doesn't exist");
         }
-        model.addAttribute("group", group);
+
         return "admin/groupInfo";
     }
 
@@ -158,8 +159,10 @@ public class AdminController {
     public String changePassword(@RequestParam Map<String, String> args, Authentication authentication) {
         try {
             userService.changePassword(authentication.getName(), args.get("oldPassword"), args.get("newPassword"));
-        } catch (UserNotFoundException | PasswordsDontMatchException e) {
-            return "redirect:/admin/settings";
+        } catch (UserNotFoundException e) {
+            logger.warn("User dosn't exist");
+        } catch (PasswordsDontMatchException e) {
+            logger.warn("Passwords don't match each other");
         }
 
         return "redirect:/admin/settings";
