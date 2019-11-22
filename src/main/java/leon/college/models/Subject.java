@@ -9,28 +9,20 @@ import lombok.experimental.Tolerate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "persons")
+@Table(name = "subjects")
 @Data
 @Builder
 @ToString
 @EqualsAndHashCode(exclude = {"group"})
-public class User {
+public class Subject {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false, unique = true)
-    private String username;
-    private String password;
-    private Boolean enabled;
-    @Enumerated(EnumType.STRING)
-    private Role role;
-    private String firstName;
-    private String lastName;
+    private String title;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
 
     @Tolerate
-    User() {
-    }
+    Subject(){}
 }

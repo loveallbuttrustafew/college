@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Предметы | ГГМК</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+{{>admin/menu}}
+<div class="container">
+    <form action="/admin/subjects/add" method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Название, группа</span>
+            </div>
+            <input class="form-control" name="title" type="text">
+            <input class="form-control" name="groupId" type="number">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Добавить">
+        <input name="_csrf" type="hidden" value="{{_csrf.token}}"/>
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Группа</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#subjects}}
+        <tr>
+            <th scope="row"><a href="/admin/subjects/{{id}}">{{id}}</a></th>
+            <td>{{title}}</td>
+            <td>{{#group}}{{group.id}}{{/group}}</td>
+        </tr>
+        {{/subjects}}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

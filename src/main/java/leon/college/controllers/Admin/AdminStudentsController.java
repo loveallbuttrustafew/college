@@ -23,7 +23,7 @@ import java.util.Map;
 
 
 @Controller
- class AdminStudentsController {
+class AdminStudentsController {
     Logger logger = LoggerFactory.getLogger(AdminStudentsController.class);
 
     @Autowired

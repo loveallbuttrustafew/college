@@ -1,9 +1,10 @@
 package leon.college.models;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Tolerate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Data
 @Builder
 @ToString
-@EqualsAndHashCode(exclude = {"users"})
+@EqualsAndHashCode(exclude = {"users", "subjects"})
 public class Group {
     @Id
     @GeneratedValue
@@ -29,7 +30,10 @@ public class Group {
     private Byte number;
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private Set<Subject> subjects = new HashSet<>();
 
     @Tolerate
-    Group(){}
+    Group() {
+    }
 }

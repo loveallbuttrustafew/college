@@ -49,4 +49,9 @@ public class CommonController {
     public String admin() {
         return "redirect:/admin/groups";
     }
+
+    @GetMapping("/student")
+    public String student() {
+        return "redirect:/student/subjects";
+    }
 }
