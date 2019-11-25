@@ -35,12 +35,12 @@ public class GroupService {
     }
 
     public Group findByGroup(Group group) throws GroupNotFoundException {
-        Group findedGroup = groupRepository.findByTitleAndCourseAndNumberAndCommercial(
+        Optional<Group> findedGroup = groupRepository.findByTitleAndCourseAndNumberAndCommercial(
                 group.getTitle(), group.getCourse(), group.getNumber(), group.getCommercial());
-        if (findedGroup == null) {
+        if (!findedGroup.isPresent()) {
             throw new GroupNotFoundException();
         }
-        return findedGroup;
+        return findedGroup.get();
     }
 
     public void addGroup(Group group) throws GroupAlreadyExists {

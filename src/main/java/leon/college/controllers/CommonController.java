@@ -39,7 +39,7 @@ public class CommonController {
         try {
             userService.addUser(user);
         } catch (UserAlreadyExistsException e) {
-            logger.warn("Admin already exists");
+            logger.error("Admin already exists");
         }
 
         return "redirect:/";

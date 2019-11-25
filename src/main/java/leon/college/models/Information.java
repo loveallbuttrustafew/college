@@ -8,26 +8,23 @@ import lombok.experimental.Tolerate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "subjects")
+@Table(name = "information")
 @Data
 @Builder
-@EqualsAndHashCode(exclude = {"group"})
-public class Subject {
+@EqualsAndHashCode
+public class Information {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String title;
-    @OneToOne
-    @JoinColumn(name = "teacherId", nullable = false)
-    private User teacher;
     @Column(nullable = false)
-    private Boolean finished = false;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "groupId", nullable = false)
-    private Group group;
+    private String filePath;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Tolerate
-    Subject() {
+    Information() {
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -23,8 +24,9 @@ import java.util.Map;
 
 
 @Controller
+@RequestMapping(value = "/admin/")
 class AdminStudentsController {
-    Logger logger = LoggerFactory.getLogger(AdminStudentsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminStudentsController.class);
 
     @Autowired
     private UserService userService;
@@ -32,20 +34,20 @@ class AdminStudentsController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("/admin/students")
+    @GetMapping("/students")
     public String students(Model model) {
         List<User> students;
         try {
             students = userService.findByRole(Role.STUDENT);
             model.addAttribute("students", students);
         } catch (UserNotFoundException e) {
-            logger.error("Students not found");
+            logger.warn("Students not found");
         }
 
         return "admin/students";
     }
 
-    @PostMapping(value = "/admin/students/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/students/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String addStudent(@RequestParam Map<String, String> args) {
         Group group;
         try {
@@ -61,9 +63,9 @@ class AdminStudentsController {
                     .build();
             userService.addUser(user);
         } catch (GroupNotFoundException e) {
-            logger.warn("Group doesn't exists");
+            logger.error("Group doesn't exists");
         } catch (UserAlreadyExistsException e) {
-            logger.warn("Username already taken");
+            logger.error("Username already taken");
         }
 
         return "redirect:/admin/students";

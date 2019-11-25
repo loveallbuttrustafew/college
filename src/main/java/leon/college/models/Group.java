@@ -3,7 +3,6 @@ package leon.college.models;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
@@ -14,11 +13,10 @@ import java.util.Set;
 @Table(name = "groups")
 @Data
 @Builder
-@ToString
 @EqualsAndHashCode(exclude = {"users", "subjects"})
 public class Group {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String title;
@@ -28,6 +26,10 @@ public class Group {
     private Byte course;
     @Column(nullable = false)
     private Byte number;
+    @OneToOne
+    @JoinColumn(name = "curatorId", nullable = false)
+    private User curator;
+
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)

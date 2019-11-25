@@ -13,17 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping(value = "/admin")
 public class AdminSubjectsController {
-    Logger logger = LoggerFactory.getLogger(AdminSubjectsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminSubjectsController.class);
 
     @Autowired
     private SubjectService subjectService;
@@ -31,25 +29,25 @@ public class AdminSubjectsController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("/admin/subjects")
+    @GetMapping("/subjects")
     public String subjects(Model model) {
         List<Subject> subjects = subjectService.findAll();
         model.addAttribute("subjects", subjects);
         return "admin/subjects";
     }
 
-    @GetMapping("/admin/subjects/{id}")
+    @GetMapping("/subjects/{id}")
     public String groupInfo(@PathVariable String id, Model model) {
         try {
             Subject subject = subjectService.findById(Long.valueOf(id));
             model.addAttribute("subject", subject);
         } catch (SubjectNotFoundException e) {
-            logger.warn("Subject doesn't exist");
+            logger.error("Subject doesn't exist");
         }
         return "admin/subjectInfo";
     }
 
-    @PostMapping(value = "/admin/subjects/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/subjects/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String addSubject(@RequestParam Map<String, String> args) {
         try {
             Group group = groupService.findByGroupId(Long.valueOf(args.get("groupId")));
@@ -59,9 +57,9 @@ public class AdminSubjectsController {
                     .build();
             subjectService.addSubject(subject);
         } catch (GroupNotFoundException e) {
-            logger.warn("Group doesn't exist");
+            logger.error("Group doesn't exist");
         } catch (SubjectAlreadyExists subjectAlreadyExists) {
-            logger.warn("Subject already exists");
+            logger.error("Subject already exists");
         }
 
         return "redirect:/admin/subjects";

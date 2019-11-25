@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,17 +19,17 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<User> findByRole(Role role) throws UserNotFoundException {
-        List<User> users = userRepository.findByRole(role);
-        if (users == null)
+        Optional<List<User>> users = userRepository.findByRole(role);
+        if (!users.isPresent())
             throw new UserNotFoundException();
-        return users;
+        return users.get();
     }
 
     public User findByUsername(String username) throws UserNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null)
+        Optional<User> user = userRepository.findByUsername(username);
+        if (!user.isPresent())
             throw new UserNotFoundException();
-        return user;
+        return user.get();
     }
 
     public void addUser(User user) throws UserAlreadyExistsException {
@@ -40,6 +41,7 @@ public class UserService {
         }
     }
 
+    // TODO CHANGE PASSWORD WITH HASH
     public void changePassword(String username, String oldPassword, String newPassword) throws UserNotFoundException, PasswordsDontMatchException {
         User user = findByUsername(username);
         if (!user.getPassword().equals(oldPassword))

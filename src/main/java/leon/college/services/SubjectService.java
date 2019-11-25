@@ -24,10 +24,10 @@ public class SubjectService {
     }
 
     public Subject findBySubject(Subject subject) throws SubjectDoesntFoundedException {
-        Subject findedSubject = subjectRepository.findByTitleAndGroup(subject.getTitle(), subject.getGroup());
-        if (findedSubject == null)
+        Optional<Subject> findedSubject = subjectRepository.findByTitleAndGroup(subject.getTitle(), subject.getGroup());
+        if (!findedSubject.isPresent())
             throw new SubjectDoesntFoundedException();
-        return findedSubject;
+        return findedSubject.get();
     }
 
     public void addSubject(Subject subject) throws SubjectAlreadyExists {
