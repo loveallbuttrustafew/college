@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin/")
@@ -37,14 +36,7 @@ public class AdminGroupsController {
     }
 
     @PostMapping(value = "/groups/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String addGroup(@RequestParam Map<String, String> args) {
-        Group group = Group.builder()
-                .title(args.get("title"))
-                .course(Byte.parseByte(args.get("course")))
-                .number(Byte.parseByte(args.get("number")))
-                .commercial(args.get("commercial") != null)
-                .build();
-
+    public String addGroup(Group group) {
         try {
             groupService.addGroup(group);
         } catch (GroupAlreadyExists groupAlreadyExists) {
